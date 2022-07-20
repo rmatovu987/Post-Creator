@@ -5,10 +5,11 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 
 export const routes: Routes = [
   { path: '', component: PostListComponent },
-  { path: 'new', component:PostCreateComponent}
+  { path: 'new', component: PostCreateComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}

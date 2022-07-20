@@ -3,11 +3,13 @@ const parser = require("body-parser");
 const mongoose = require("mongoose");
 const Post = require("./models/post");
 
+require('dotenv/config');
+
 const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://rmatovu987:arkounts@cluster0.rcg5o9d.mongodb.net/posts?retryWrites=true&w=majority",
+    process.env.DB_CONNECTION,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {

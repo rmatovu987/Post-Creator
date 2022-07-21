@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'image-upload'`, () => {
+  it(`should have as title 'post-creator'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('image-upload');
+    expect(app.title).toEqual('post-creator');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('image-upload app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('post-creator app is running!');
   });
 });

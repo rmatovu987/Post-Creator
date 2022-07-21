@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { map, Observable, Subject } from 'rxjs';
 import { Post } from './post.model';
 
 @Injectable({
@@ -10,7 +11,7 @@ export class PostsService {
   private posts: Post[] = [];
   private updatedPosts = new Subject<Post[]>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   getPosts() {
     this.http
@@ -37,38 +38,58 @@ export class PostsService {
       });
   }
 
+  updatePost(id: string, post: Post) {
+    this.http
+      .put<{ message: string }>('http://localhost:3000/api/posts/'+id, post)
+      .subscribe({
+        next: () => {
+        },
+        error: (err: any) => {
+          console.log(err);
+        },
+        complete: () => {
+          this.getPosts();
+          this.router.navigate(['/']);
+        },
+      });
+  }
+
   getUpdatedPosts() {
     return this.updatedPosts.asObservable();
+  }
+
+  getPostDetails(id: string): Observable<{message: string, data:Post}> {
+    return this.http.get<{ message: string; data: Post }>('http://localhost:3000/api/posts/'+id);
   }
 
   addPost(post: Post) {
     this.http
       .post<{ message: string }>('http://localhost:3000/api/posts', post)
       .subscribe({
-        next: (data: any) => {
-          console.log(data);
+        next: () => {
         },
         error: (err: any) => {
           console.log(err);
         },
         complete: () => {
           this.getPosts();
+          this.router.navigate(['/']);
         },
       });
   }
 
-  deletePost(id: number){
+  deletePost(id: string){
     this.http
       .delete<{ message: string }>('http://localhost:3000/api/posts/'+id)
       .subscribe({
-        next: (data: any) => {
-          console.log(data);
+        next: () => {
         },
         error: (err: any) => {
           console.log(err);
         },
         complete: () => {
           this.getPosts();
+          this.router.navigate(['/']);
         },
       });
   }

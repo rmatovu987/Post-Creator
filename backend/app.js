@@ -1,17 +1,18 @@
 const express = require("express");
 const parser = require("body-parser");
 const mongoose = require("mongoose");
-const Post = require("./models/post");
 
-require('dotenv/config');
+const postsRoutes = require("./routes/posts");
+
+require("dotenv/config");
 
 const app = express();
 
 mongoose
-  .connect(
-    process.env.DB_CONNECTION,
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(process.env.DB_CONNECTION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     console.log("Connected to database!");
   })
@@ -34,38 +35,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/api/posts", (req, res) => {
-  Post.find()
-    .then((posts) => {
-      res.status(200).json({
-        message: "Posts fetched successfully",
-        data: posts,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-app.post("/api/posts", (req, res) => {
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content,
-  });
-  post.save();
-
-  res.status(201).json({
-    message: "Post saved successfully",
-  });
-});
-
-app.delete("/api/posts/:id", (req, res) => {
-  Post.deleteOne({_id : req.params.id}).then(()=>{
-    res.status(200).json({ message: "Post deleted succesffully" });
-  }).catch((err)=>{
-    console.log(err)
-  });
-
-});
+app.use('/api/posts', postsRoutes);
 
 module.exports = app;
